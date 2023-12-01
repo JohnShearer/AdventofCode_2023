@@ -1,0 +1,49 @@
+# import required packages
+import os
+import re
+
+## set directory 
+os.chdir("C:/Users/xxxxxxxxxxxxx/Desktop/Advent_of_Code/2023")
+
+## read in data as a list
+with open('input_day1.txt', "r") as f:
+  text = [line.rstrip('\n') for line in f]    
+
+def replace_word_with_num(text_list):
+    # Dictionary to map words to digits
+    # This is a bit of a bodge to deal with overlapping numbers - e.g. eightwo = 8,2
+    # We just retain the first and last letter with the number
+    word_to_digit = {
+        'zero': 'z0o', 'one': 'o1e', 'two': 't2o', 'three': 't3e', 'four': 'f4r',
+        'five': 'f5e', 'six': 's6x', 'seven': 's7n', 'eight': 'e8t', 'nine': 'n9e'
+    }
+    
+    # iterate over text and replace words with digits from word_to_digit dict.
+    new_text = []
+    for text in text_list:
+        for word, digit in word_to_digit.items():
+            text = text.replace(word, digit)
+        new_text.append(text)
+    
+    # iterate over new_text and pull out all the digits
+    digits = []
+    for item in new_text:
+        digits.append(re.findall(r'\d', item))
+        
+    # iterate over digits and add the first and last digits, dealing with cases where number of digits = 1, 2, or >2
+    numbers = []
+    for item in digits:
+        if len(item) == 2:
+            nums = item[0]+item[1]
+            numbers.append(int(nums))
+        if len(item) == 1:
+            nums = item[0]+item[0]
+            numbers.append(int(nums))
+        if len(item) > 2:
+            num1 = item[0]
+            num2 = item[-1]
+            nums = num1+num2
+            numbers.append(int(nums))
+    
+    # final output is the sum of our numbers
+    return sum(numbers)
