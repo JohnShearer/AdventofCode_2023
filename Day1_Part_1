@@ -1,0 +1,37 @@
+# import required packages
+
+import os
+import re
+
+## set directory 
+os.chdir("C:/Users/XXXXXXXXXXXXXXXX/Desktop/Advent_of_Code/2023")
+
+## read in data as a list
+with open('input_day1.txt', "r") as f:
+  text = [line.rstrip('\n') for line in f]    
+
+
+def sum_nums(text_list):
+      
+    # iterate over text and pull out all the digits
+    digits = []
+    for item in text_list:
+        digits.append(re.findall(r'\d', item))
+        
+    # iterate over digits and add the first and last digits, dealing with cases where number of digits = 1, 2, or >2
+    numbers = []
+    for item in digits:
+        if len(item) == 2:
+            nums = item[0]+item[1]
+            numbers.append(int(nums))
+        if len(item) == 1:
+            nums = item[0]+item[0]
+            numbers.append(int(nums))
+        if len(item) > 2:
+            num1 = item[0]
+            num2 = item[-1]
+            nums = num1+num2
+            numbers.append(int(nums))
+    
+    # final output is the sum of our numbers
+    return sum(numbers)
